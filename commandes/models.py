@@ -29,7 +29,7 @@ class Joueur(models.Model):
         return f"{self.prenom} {self.nom}".strip()
 
     def get_absolute_url(self):
-        return reverse("joueur_modifier", args=[self.pk])
+        return reverse("balles:joueur_modifier", args=[self.pk])
 
     @property
     def telephone_international(self):
@@ -78,7 +78,7 @@ class Commande(models.Model):
         return self.nom
 
     def get_absolute_url(self):
-        return reverse("commande_detail", args=[self.pk])
+        return reverse("balles:commande_detail", args=[self.pk])
 
     @property
     def total_boites(self):

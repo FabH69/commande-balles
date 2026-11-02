@@ -4,8 +4,8 @@
 <div class="actions" style="justify-content:space-between">
   <h1>{{ commande.nom }} <span class="badge {{ commande.statut }}">{{ commande.get_statut_display }}</span></h1>
   <div class="actions">
-    <a class="btn sec" href="{% url 'commande_modifier' commande.pk %}">Modifier</a>
-    <a class="btn" href="{% url 'commande_messages' commande.pk %}">✉️ Prévenir les joueurs</a>
+    <a class="btn sec" href="{% url 'balles:commande_modifier' commande.pk %}">Modifier</a>
+    <a class="btn" href="{% url 'balles:commande_messages' commande.pk %}">✉️ Prévenir les joueurs</a>
   </div>
 </div>
 <p class="doux">{{ commande.produit }} à {{ commande.prix_boite|floatformat:2 }} € · commission {{ commande.taux_commission|floatformat:-2 }} %
@@ -29,7 +29,7 @@
     <button class="btn">Ajouter</button>
   </form>
   {% for e in form.errors.values %}<div class="erreur" style="color:var(--rouge)">{{ e|striptags }}</div>{% endfor %}
-  <p class="doux" style="margin:8px 0 0">Joueur absent de la liste ? <a href="{% url 'joueur_creer' %}?next={{ request.path|urlencode }}">Créer un joueur</a></p>
+  <p class="doux" style="margin:8px 0 0">Joueur absent de la liste ? <a href="{% url 'balles:joueur_creer' %}?next={{ request.path|urlencode }}">Créer un joueur</a></p>
 </div>
 
 <div class="table-wrap">
@@ -39,7 +39,7 @@
   <tr>
     <td>{{ l.joueur }}{% if l.notes %}<br><span class="doux">{{ l.notes }}</span>{% endif %}</td>
     <td>
-      <form method="post" action="{% url 'ligne_action' l.pk %}" class="inline">{% csrf_token %}
+      <form method="post" action="{% url 'balles:ligne_action' l.pk %}" class="inline">{% csrf_token %}
         <input type="hidden" name="action" value="boites">
         <input class="nb" type="number" min="1" name="nb_boites" value="{{ l.nb_boites }}" onchange="this.form.submit()">
       </form>
@@ -49,7 +49,7 @@
     <td>{% include "commandes/_bascule.html" with action="prevenu" actif=l.prevenu_le %}</td>
     <td>{% include "commandes/_bascule.html" with action="remis" actif=l.remis %}</td>
     <td>
-      <form method="post" action="{% url 'ligne_action' l.pk %}" class="inline" onsubmit="return confirm('Retirer {{ l.joueur|escapejs }} de la commande ?')">{% csrf_token %}
+      <form method="post" action="{% url 'balles:ligne_action' l.pk %}" class="inline" onsubmit="return confirm('Retirer {{ l.joueur|escapejs }} de la commande ?')">{% csrf_token %}
         <input type="hidden" name="action" value="supprimer"><button class="btn petit danger" title="Retirer">✕</button>
       </form>
     </td>
@@ -63,7 +63,7 @@
 <h2>Avancement de la commande</h2>
 <div class="actions">
   {% for valeur, libelle in statuts %}
-  <form method="post" action="{% url 'commande_statut' commande.pk %}" class="inline">{% csrf_token %}
+  <form method="post" action="{% url 'balles:commande_statut' commande.pk %}" class="inline">{% csrf_token %}
     <input type="hidden" name="statut" value="{{ valeur }}">
     <button class="btn petit {% if commande.statut == valeur %}{% else %}sec{% endif %}">{{ libelle }}</button>
   </form>

@@ -2,7 +2,7 @@
 {% block contenu %}
 <div class="actions" style="justify-content:space-between">
   <h1>Commandes</h1>
-  <a class="btn" href="{% url 'commande_creer' %}">+ Nouvelle commande</a>
+  <a class="btn" href="{% url 'balles:commande_creer' %}">+ Nouvelle commande</a>
 </div>
 <div class="chiffres">
   <div class="chiffre"><b>{{ en_cours|length }}</b><span>commande(s) en cours</span></div>

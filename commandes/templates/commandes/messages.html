@@ -4,7 +4,7 @@
 <p><a href="{{ commande.get_absolute_url }}">← {{ commande.nom }}</a></p>
 <h1>Prévenir les joueurs</h1>
 <p class="doux">Chaque bouton ouvre WhatsApp, les SMS ou votre messagerie avec le message déjà rempli : il ne reste qu'à appuyer sur Envoyer.
-Le texte se modifie dans <a href="{% url 'commande_modifier' commande.pk %}">la commande</a> (champ « message balles arrivées » et « lieu / créneau de remise »).</p>
+Le texte se modifie dans <a href="{% url 'balles:commande_modifier' commande.pk %}">la commande</a> (champ « message balles arrivées » et « lieu / créneau de remise »).</p>
 
 <div class="carte">
   <h2 style="margin-top:0">Message pour le groupe</h2>
@@ -29,7 +29,7 @@ Le texte se modifie dans <a href="{% url 'commande_modifier' commande.pk %}">la 
     {% if e.email %}<a class="btn sec" href="{{ e.email }}">E-mail</a>{% endif %}
     {% if not e.whatsapp and not e.email %}<span class="doux">Pas de téléphone ni d'e-mail : <a href="{{ e.ligne.joueur.get_absolute_url }}?next={{ request.path|urlencode }}">compléter la fiche</a></span>{% endif %}
     <button class="btn sec" type="button" onclick="copier('msg{{ e.ligne.pk }}', this)">Copier</button>
-    <form method="post" action="{% url 'ligne_action' e.ligne.pk %}" class="inline">{% csrf_token %}
+    <form method="post" action="{% url 'balles:ligne_action' e.ligne.pk %}" class="inline">{% csrf_token %}
       <input type="hidden" name="action" value="prevenu"><input type="hidden" name="next" value="{{ request.path }}">
       {% if e.ligne.prevenu_le %}<button class="btn petit sec">Annuler « prévenu »</button>{% else %}<button class="btn petit ok">✔ Marquer prévenu</button>{% endif %}
     </form>

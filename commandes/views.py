@@ -39,11 +39,11 @@ def joueur_form(request, pk=None):
         suivant = request.GET.get("next")
         if suivant and suivant.startswith("/"):
             return redirect(suivant)
-        return redirect("joueurs")
+        return redirect("balles:joueurs")
     return render(request, "commandes/form.html", {
         "form": form,
         "titre": f"Modifier {joueur}" if joueur else "Nouveau joueur",
-        "retour": "joueurs",
+        "retour": "balles:joueurs",
     })
 
 
@@ -60,7 +60,7 @@ def commande_form(request, pk=None):
     return render(request, "commandes/form.html", {
         "form": form,
         "titre": f"Modifier {commande}" if commande else "Nouvelle commande",
-        "retour": "accueil",
+        "retour": "balles:accueil",
     })
 
 
@@ -97,7 +97,7 @@ def commande_statut(request, pk):
         commande.save()
         messages.success(request, f"Statut : {commande.get_statut_display()}.")
         if statut == Commande.Statut.RECUE:
-            return redirect("commande_messages", pk=pk)
+            return redirect("balles:commande_messages", pk=pk)
     return redirect(commande)
 
 
@@ -138,7 +138,7 @@ def commande_messages(request, pk):
     if request.method == "POST" and request.POST.get("action") == "tous_prevenus":
         commande.lignes.filter(prevenu_le__isnull=True).update(prevenu_le=timezone.now())
         messages.success(request, "Tous les joueurs sont marqués comme prévenus.")
-        return redirect("commande_messages", pk=pk)
+        return redirect("balles:commande_messages", pk=pk)
 
     envois = []
     for ligne in commande.lignes.select_related("joueur"):

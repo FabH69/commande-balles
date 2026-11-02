@@ -32,7 +32,7 @@ class CommandeTests(TestCase):
 
     def test_actions_ligne(self):
         l = Ligne.objects.create(commande=self.c, joueur=self.julie, nb_boites=2)
-        url = reverse("ligne_action", args=[l.pk])
+        url = reverse("balles:ligne_action", args=[l.pk])
         self.client.post(url, {"action": "paye"})
         self.client.post(url, {"action": "boites", "nb_boites": "5"})
         l.refresh_from_db()
@@ -42,23 +42,23 @@ class CommandeTests(TestCase):
     def test_message_et_liens(self):
         Ligne.objects.create(commande=self.c, joueur=self.julie, nb_boites=2)
         Ligne.objects.create(commande=self.c, joueur=self.tom, nb_boites=1)
-        r = self.client.get(reverse("commande_messages", args=[self.c.pk]))
+        r = self.client.get(reverse("balles:commande_messages", args=[self.c.pk]))
         self.assertContains(r, "Bonjour Julie")
         self.assertContains(r, "15,00 €")
         self.assertContains(r, "https://wa.me/33611223344?text=")
         self.assertContains(r, "mailto:tom@example.com")
 
     def test_passage_recue_redirige_vers_messages(self):
-        r = self.client.post(reverse("commande_statut", args=[self.c.pk]), {"statut": "recue"})
-        self.assertRedirects(r, reverse("commande_messages", args=[self.c.pk]))
+        r = self.client.post(reverse("balles:commande_statut", args=[self.c.pk]), {"statut": "recue"})
+        self.assertRedirects(r, reverse("balles:commande_messages", args=[self.c.pk]))
         self.c.refresh_from_db()
         self.assertIsNotNone(self.c.date_reception)
 
     def test_pages_principales(self):
         for nom in ["accueil", "joueurs", "joueur_creer", "commande_creer"]:
-            self.assertEqual(self.client.get(reverse(nom)).status_code, 200)
+            self.assertEqual(self.client.get(reverse("balles:" + nom)).status_code, 200)
 
     def test_connexion_obligatoire(self):
         self.client.logout()
-        r = self.client.get(reverse("accueil"))
+        r = self.client.get(reverse("balles:accueil"))
         self.assertEqual(r.status_code, 302)
