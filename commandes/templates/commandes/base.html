@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block titre %}Commandes de balles{% endblock %}</title>
+<style>
+  :root { --vert:#2f7d32; --vert-clair:#e8f5e9; --gris:#f4f5f7; --bord:#dde1e6; --texte:#1f2933; --doux:#6b7785; --rouge:#c62828; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:var(--texte); background:var(--gris); font-size:16px; }
+  header { background:var(--vert); color:#fff; padding:12px 16px; display:flex; flex-wrap:wrap; gap:8px 18px; align-items:center; }
+  header a, header button { color:#fff; text-decoration:none; font-weight:500; background:none; border:0; font:inherit; cursor:pointer; padding:0; }
+  header .logo { font-weight:700; font-size:1.1rem; margin-right:auto; }
+  main { max-width:960px; margin:0 auto; padding:16px; }
+  h1 { font-size:1.4rem; margin:8px 0 16px; }
+  h2 { font-size:1.1rem; margin:24px 0 10px; }
+  .carte { background:#fff; border:1px solid var(--bord); border-radius:10px; padding:16px; margin-bottom:16px; }
+  .chiffres { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:16px; }
+  .chiffre { background:#fff; border:1px solid var(--bord); border-radius:10px; padding:12px; }
+  .chiffre b { display:block; font-size:1.4rem; }
+  .chiffre span { color:var(--doux); font-size:.85rem; }
+  table { width:100%; border-collapse:collapse; background:#fff; }
+  th, td { padding:8px 10px; border-bottom:1px solid var(--bord); text-align:left; vertical-align:middle; }
+  th { font-size:.8rem; color:var(--doux); text-transform:uppercase; letter-spacing:.03em; }
+  .table-wrap { overflow-x:auto; border:1px solid var(--bord); border-radius:10px; }
+  .btn { display:inline-block; padding:8px 14px; border-radius:8px; border:1px solid var(--vert); background:var(--vert); color:#fff; text-decoration:none; font:inherit; font-size:.95rem; cursor:pointer; }
+  .btn.sec { background:#fff; color:var(--vert); }
+  .btn.petit { padding:4px 10px; font-size:.85rem; }
+  .btn.danger { border-color:var(--rouge); background:#fff; color:var(--rouge); }
+  .btn.ok { background:var(--vert-clair); color:var(--vert); border-color:var(--vert-clair); }
+  .actions { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  form.inline { display:inline; margin:0; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:.8rem; background:var(--gris); border:1px solid var(--bord); }
+  .badge.ouverte { background:#e3f2fd; border-color:#bbdefb; }
+  .badge.passee { background:#fff8e1; border-color:#ffecb3; }
+  .badge.recue { background:#fce4ec; border-color:#f8bbd0; }
+  .badge.terminee { background:var(--vert-clair); border-color:#c8e6c9; }
+  .messages { list-style:none; padding:0; margin:0 0 16px; }
+  .messages li { background:var(--vert-clair); border:1px solid #c8e6c9; padding:10px 14px; border-radius:8px; margin-bottom:6px; }
+  .champ { margin-bottom:14px; }
+  .champ label { display:block; font-weight:600; margin-bottom:4px; }
+  .champ input:not([type=checkbox]), .champ select, .champ textarea, .ajout select, .ajout input { width:100%; padding:8px 10px; border:1px solid var(--bord); border-radius:8px; font:inherit; }
+  .champ .aide { color:var(--doux); font-size:.85rem; margin-top:3px; }
+  .champ .erreur { color:var(--rouge); font-size:.9rem; }
+  .ajout { display:grid; grid-template-columns:2fr 1fr auto; gap:8px; align-items:end; }
+  @media (max-width:600px) { .ajout { grid-template-columns:1fr 1fr; } .ajout .btn { grid-column:1 / -1; } }
+  .doux { color:var(--doux); }
+  .msg-texte { white-space:pre-wrap; background:var(--gris); border-radius:8px; padding:10px; margin:8px 0; font-size:.95rem; }
+  input.nb { width:64px; padding:4px 6px; border:1px solid var(--bord); border-radius:6px; font:inherit; }
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="{% url 'accueil' %}">🎾 Commandes de balles</a>
+  {% if user.is_authenticated %}
+    <a href="{% url 'accueil' %}">Commandes</a>
+    <a href="{% url 'joueurs' %}">Joueurs</a>
+    <a href="/admin/">Admin</a>
+    <form class="inline" method="post" action="{% url 'deconnexion' %}">{% csrf_token %}<button>Déconnexion</button></form>
+  {% endif %}
+</header>
+<main>
+  {% if messages %}<ul class="messages">{% for m in messages %}<li>{{ m }}</li>{% endfor %}</ul>{% endif %}
+  {% block contenu %}{% endblock %}
+</main>
+</body>
+</html>
